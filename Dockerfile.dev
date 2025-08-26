@@ -1,0 +1,22 @@
+# Use a full Node image, not Alpine, for better compatibility with dev tools
+FROM node:20
+
+# Set the service name from the build argument and make it available at runtime
+ARG SERVICE_NAME
+ENV SERVICE_NAME=${SERVICE_NAME}
+
+WORKDIR /usr/src/app
+
+# Copy package files ONLY
+COPY package*.json ./
+
+# Install ALL dependencies, including devDependencies
+RUN npm install
+
+# This is important: By copying the full project, we ensure that
+# files like tsconfig.json and nest-cli.json are in the container
+# before we mount our local volume over it.
+COPY . .
+
+# The command to run the development server
+CMD npm run start:dev:${SERVICE_NAME}

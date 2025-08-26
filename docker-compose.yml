@@ -1,0 +1,196 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - ../DATABASE/rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - hostel-expert-network
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'ping']
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ../DATABASE/redis-data:/data
+    command: ['redis-server', '--appendonly', 'yes']
+    networks:
+      - hostel-expert-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      retries: 5
+
+  # api-gateway:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: api-gateway
+  #   container_name: api-gateway-service
+  #   ports:
+  #     - '8080:8080'
+  #   env_file:
+  #     - ./.env
+  #   volumes:
+  #     - ./:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # user-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: user
+  #   container_name: user-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # property-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: property
+  #   container_name: property-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # accounts-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: accounts
+  #   container_name: accounts-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # mess-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: mess
+  #   container_name: mess-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # maintenance-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: maintenance
+  #   container_name: maintenance-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # employees-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: employees
+  #   container_name: employees-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # auth-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: auth
+  #   container_name: auth-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # socket-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: socket
+  #   container_name: socket-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+  # notification-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       SERVICE_NAME: notification
+  #   container_name: notification-service
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - hostel-expert-network
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+
+networks:
+  hostel-expert-network:
+    driver: bridge
