@@ -3,16 +3,31 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from './schema/user.schema';
-import { DatabaseCounterSchema } from './schema/databaseCounter.schema';
+import { User, UserSchema } from './schema/user.schema';
+import {
+  DatabaseCounter,
+  DatabaseCounterSchema,
+} from './schema/databaseCounter.schema';
+import {
+  ServiceHistory,
+  ServiceHistorySchema,
+} from './schema/serviceHistory.schema';
+import {
+  StatusRequest,
+  StatusRequestSchema,
+} from './schema/statusRequest.schema';
+import { Fine, FineSchema } from './schema/fine.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.USER_MONGO_URL!),
     MongooseModule.forFeature([
-      { name: 'User', schema: UserSchema },
-      { name: 'DatabaseCounter', schema: DatabaseCounterSchema },
+      { name: User.name, schema: UserSchema },
+      { name: DatabaseCounter.name, schema: DatabaseCounterSchema },
+      { name: ServiceHistory.name, schema: ServiceHistorySchema },
+      { name: StatusRequest.name, schema: StatusRequestSchema },
+      { name: Fine.name, schema: FineSchema },
     ]),
   ],
   controllers: [UserController],

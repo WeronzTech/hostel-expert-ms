@@ -1,5 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import {
+  DepositStatus,
+  MealType,
+  PaymentStatus,
+  RentType,
+  RequestStatus,
+  UserCurrentStatus,
+  UserType,
+} from '../enum/user.enum';
 
 @Schema({ _id: false })
 export class PersonalDetails {
@@ -53,7 +62,7 @@ export class StayDetails {
   @Prop({ default: 0 }) depositAmountPaid: number;
   @Prop() nonRefundableDeposit: number;
   @Prop() refundableDeposit: number;
-  @Prop({ enum: ['pending', 'paid', 'refunded'], default: 'pending' })
+  @Prop({ enum: DepositStatus, default: DepositStatus.PENDING })
   depositStatus: string;
   @Prop() monthlyRent: number;
   @Prop({ default: Date.now }) joinDate: Date;
@@ -71,8 +80,8 @@ export class MessDetails {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   kitchenId: mongoose.Types.ObjectId;
   @Prop() kitchenName: string;
-  @Prop({ type: [String], enum: ['breakfast', 'lunch', 'dinner'] })
-  mealType: string[];
+  @Prop({ type: [String], enum: MealType })
+  mealType: MealType[];
   @Prop() rent: number;
   @Prop() messStartDate: Date;
   @Prop() messEndDate: Date;
@@ -83,15 +92,6 @@ export class MessDetails {
 export const MessDetailsSchema = SchemaFactory.createForClass(MessDetails);
 
 @Schema({ _id: false })
-export class Fine {
-  @Prop({ required: true }) amount: number;
-  @Prop({ required: true }) reason: string;
-  @Prop({ default: Date.now }) dateIssued: Date;
-  @Prop({ default: false }) paid: boolean;
-}
-export const FineSchema = SchemaFactory.createForClass(Fine);
-
-@Schema({ _id: false })
 export class FinancialDetails {
   @Prop({ default: 0 }) monthlyRent: number;
   @Prop({ default: 0 }) pendingRent: number;
@@ -100,46 +100,25 @@ export class FinancialDetails {
   @Prop() paymentDueSince: Date;
   @Prop({ default: 0 }) totalAmount: number;
   @Prop({ default: 0 }) pendingAmount: number;
-  @Prop({ type: [FineSchema], default: [] }) fines: Fine[];
 }
 export const FinancialDetailsSchema =
   SchemaFactory.createForClass(FinancialDetails);
 
 @Schema({ _id: false })
-export class StatusRequest {
-  @Prop({ enum: ['checked_in', 'on_leave', 'checked_out'] }) type: string;
-  @Prop({ default: Date.now }) requestedAt: Date;
-  @Prop({ enum: ['pending', 'approved', 'rejected'], default: 'pending' })
-  status: string;
-  @Prop() reason: string;
-  @Prop() reviewerComment: string;
-  @Prop() reviewedAt: Date;
-  @Prop() reviewedBy: string;
-}
-export const StatusRequestSchema = SchemaFactory.createForClass(StatusRequest);
-
-@Schema({ _id: false })
 export class CurrentStatusRequest {
-  @Prop({ enum: ['checked_in', 'on_leave', 'checked_out'] }) type: string;
-  @Prop({ enum: ['pending', 'approved', 'rejected'] }) status: string;
+  @Prop({ enum: UserCurrentStatus }) type: string;
+  @Prop({ enum: RequestStatus }) status: string;
 }
 export const CurrentStatusRequestSchema =
   SchemaFactory.createForClass(CurrentStatusRequest);
-
-@Schema({ _id: false })
-export class ReferralHistory {
-  @Prop({ type: [String] }) referredUsers: string[];
-  @Prop() lastUsed: Date;
-}
-export const ReferralHistorySchema =
-  SchemaFactory.createForClass(ReferralHistory);
 
 @Schema({ _id: false })
 export class ReferralInfo {
   @Prop({ default: false }) isReferralProcessed: boolean;
   @Prop() referralLink: string;
   @Prop() referredByLink: string;
-  @Prop({ type: ReferralHistorySchema }) referralHistory: ReferralHistory;
+  @Prop({ type: String }) referredUsers: string;
+  @Prop() lastUsed: Date;
   @Prop({ default: 1 }) level: number;
   @Prop({ default: 0 }) totalReferrals: number;
   @Prop({ default: 0 }) referralEarnings: number;
@@ -154,38 +133,18 @@ export class RentReminder {
 }
 export const RentReminderSchema = SchemaFactory.createForClass(RentReminder);
 
-@Schema({ _id: false })
-export class ServiceHistory {
-  @Prop() userType: string;
-  @Prop() rentType: string;
-  @Prop() propertyName: string;
-  @Prop() kitchenName: string;
-  @Prop() sharingType: string;
-  @Prop() roomNumber: string;
-  @Prop() nonRefundableDeposit: number;
-  @Prop() refundableDeposit: number;
-  @Prop() depositAmountPaid: number;
-  @Prop() rent: number;
-  @Prop() serviceStartDate: Date;
-  @Prop() serviceEndDate: Date;
-  @Prop() reason: string;
-}
-export const ServiceHistorySchema =
-  SchemaFactory.createForClass(ServiceHistory);
-
 @Schema({ timestamps: true, discriminatorKey: 'userType' })
 export class User extends Document {
   @Prop({ type: String, unique: true }) userId: string;
   @Prop({
     type: String,
-    enum: ['student', 'worker', 'dailyRent', 'messOnly'],
+    enum: UserType,
     required: true,
   })
   userType: string;
-  @Prop({ type: String, enum: ['monthly', 'daily', 'mess'], required: true })
+  @Prop({ type: String, enum: RentType, required: true })
   rentType: string;
   @Prop() name: string;
-  @Prop() residentId: string;
   @Prop() email: string;
   @Prop({ required: true }) contact: string;
   @Prop() password: string;
@@ -200,16 +159,14 @@ export class User extends Document {
   @Prop({ type: MessDetailsSchema, default: {} }) messDetails: MessDetails;
   @Prop({ type: FinancialDetailsSchema, default: {} })
   financialDetails: FinancialDetails;
-  @Prop({ type: String, default: 'pending', enum: ['pending', 'paid'] })
+  @Prop({ type: String, default: PaymentStatus.PENDING, enum: PaymentStatus })
   paymentStatus: string;
   @Prop({
     type: String,
-    enum: ['checked_in', 'on_leave', 'checked_out'],
-    default: 'checked_in',
+    enum: UserCurrentStatus,
+    default: UserCurrentStatus.CHECKED_IN,
   })
   currentStatus: string;
-  @Prop({ type: [StatusRequestSchema], default: [] })
-  statusRequests: StatusRequest[];
   @Prop({ type: CurrentStatusRequestSchema, default: {} })
   currentStatusRequest: CurrentStatusRequest;
   @Prop({ type: ReferralInfoSchema, default: {} }) referralInfo: ReferralInfo;
@@ -227,11 +184,8 @@ export class User extends Document {
   @Prop() resetPasswordExpires: Date;
   @Prop() emailVerificationToken: string;
   @Prop() emailVerificationExpires: Date;
-  @Prop() approvedByName: string;
-  @Prop() updatedByName: string;
-  @Prop([String]) fcmTokens: string[];
-  @Prop({ type: [ServiceHistorySchema], default: [] })
-  serviceHistory: ServiceHistory[];
+  @Prop() approvedBy: mongoose.Types.ObjectId[];
+  @Prop() updatedBy: mongoose.Types.ObjectId;
   @Prop() notes: string;
   currentRent: number;
   calculateTotalDues: () => number;
