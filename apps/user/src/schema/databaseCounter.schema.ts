@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { DatabaseCounterEnum } from '../enum/user.enum';
 
 @Schema()
 export class DatabaseCounter extends Document {
   @Prop({
     type: String,
-    enum: ['User'],
+    enum: DatabaseCounterEnum,
     required: true,
   })
   type: string;
