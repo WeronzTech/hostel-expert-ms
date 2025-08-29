@@ -5,7 +5,11 @@ import {
   EmployeeStatus,
   PreferredPaymentMethod,
   SalaryStatus,
+  DatabaseCounterEnum,
 } from '../enum/employee.enum';
+import { DatabaseCounterDocument } from './databaseCounter.schema';
+
+export type ManagerDocument = Manager & Document;
 
 @Schema({ _id: false })
 export class BankAccountDetails {
@@ -167,3 +171,37 @@ export class Manager extends Document {
 }
 
 export const ManagerSchema = SchemaFactory.createForClass(Manager);
+
+// ---------- Custom ID generation ---------- //
+ManagerSchema.pre<ManagerDocument>('save', async function (next) {
+  try {
+    if (this.isNew) {
+      const now = new Date();
+      const year = now.getFullYear().toString().slice(-2); // e.g. 2025 → "25"
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // e.g. August → "08"
+
+      const CounterModel =
+        this.db.model<DatabaseCounterDocument>('DatabaseCounter');
+
+      const counter = await CounterModel.findOneAndUpdate(
+        {
+          type: DatabaseCounterEnum.MANAGER, // 🔹 ensure manager-specific counter
+          year: parseInt(year, 10),
+          month: parseInt(month, 10),
+        },
+        { $inc: { count: 1 } },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+      );
+
+      if (!counter) {
+        throw new Error('Failed to generate managerId counter.');
+      }
+
+      // 🔹 Generate padded managerId
+      this.managerId = `HVNS-M${year}${month}${counter.count.toString().padStart(4, '0')}`;
+    }
+    next();
+  } catch (err) {
+    next(err as Error);
+  }
+});
