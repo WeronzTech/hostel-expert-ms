@@ -1,7 +1,13 @@
+export enum DatabaseCounterEnum {
+  EMPLOYEE = 'Employee',
+  MANAGER = 'Manager',
+}
+
 export enum EmployeeStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive',
 }
+
 export enum Gender {
   MALE = 'Male',
   FEMALE = 'Female',
@@ -9,6 +15,11 @@ export enum Gender {
 }
 
 export enum PreferredPaymentMethod {
-  BANK_ACCOUNT = 'BANK_ACCOUNT',
+  BANK_ACCOUNT = 'Bank_Account',
   UPI = 'UPI',
+}
+
+export enum SalaryStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
 }

@@ -4,6 +4,7 @@ import {
   Gender,
   EmployeeStatus,
   PreferredPaymentMethod,
+  SalaryStatus,
 } from '../enum/employee.enum';
 
 @Schema({ _id: false })
@@ -58,6 +59,24 @@ export class AccountDetails {
 export const AccountDetailsSchema =
   SchemaFactory.createForClass(AccountDetails);
 
+@Schema({ _id: false })
+export class FinancialDetails {
+  @Prop({ type: Number, required: true, default: 0 })
+  monthlySalary: number;
+
+  @Prop({ type: Number, required: true, default: 0 })
+  pendingSalary: number;
+
+  @Prop({ type: Number, required: true, default: 0 })
+  advanceSalary: number;
+
+  @Prop({ type: Date, required: false })
+  nextSalaryDueDate: Date;
+}
+
+export const FinancialDetailsSchema =
+  SchemaFactory.createForClass(FinancialDetails);
+
 @Schema({ timestamps: true })
 export class Manager extends Document {
   @Prop({ type: String, unique: true })
@@ -87,7 +106,15 @@ export class Manager extends Document {
     enum: EmployeeStatus,
     default: EmployeeStatus.ACTIVE,
   })
-  status: EmployeeStatus;
+  EmployeeStatus: EmployeeStatus;
+
+  @Prop({
+    type: String,
+    required: true,
+    enum: SalaryStatus,
+    default: SalaryStatus.PENDING,
+  })
+  SalaryStatus: SalaryStatus;
 
   @Prop({
     type: String,
@@ -119,6 +146,9 @@ export class Manager extends Document {
 
   @Prop({ type: AccountDetailsSchema, required: false })
   accountDetails: AccountDetails;
+
+  @Prop({ type: FinancialDetailsSchema, required: false })
+  financialDetails: FinancialDetails;
 
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;
