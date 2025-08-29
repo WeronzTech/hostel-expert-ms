@@ -1,9 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { CounterType } from '../enum/counter-type.enum';
 export type DatabaseCounterDocument = DatabaseCounter & Document;
 
 @Schema()
 export class DatabaseCounter extends Document {
+  @Prop({
+    type: String,
+    enum: Object.values(CounterType),
+    required: true,
+  })
+  type: string;
+
   @Prop({
     type: Number,
     required: true,
@@ -28,6 +36,6 @@ export const DatabaseCounterSchema =
 
 // Compound index to prevent duplicate counters for the same type+year+month
 DatabaseCounterSchema.index(
-  { year: 1, month: 1 },
+  { type: 1, year: 1, month: 1 },
   { unique: true, name: 'uniq_type_year_month' },
 );

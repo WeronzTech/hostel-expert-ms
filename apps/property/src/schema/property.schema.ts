@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { DatabaseCounterDocument } from './databaseCounter.schema';
+import { CounterType } from '../enum/counter-type.enum';
 
 export type PropertyDocument = Property & Document;
 
@@ -67,6 +68,7 @@ PropertySchema.pre<PropertyDocument>('save', async function (next) {
 
       const counter = await CounterModel.findOneAndUpdate(
         {
+          type: CounterType.Property,
           year: parseInt(year, 10),
           month: parseInt(month, 10),
         },
@@ -78,7 +80,7 @@ PropertySchema.pre<PropertyDocument>('save', async function (next) {
         throw new Error('Failed to generate propertyId counter.');
       }
 
-      this.propertyId = `HVNS-P${year}${month}${counter.count}`;
+      this.propertyId = `HXPT-P${year}${month}${counter.count}`;
     }
     next();
   } catch (err) {
