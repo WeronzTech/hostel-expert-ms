@@ -130,9 +130,6 @@ export class Manager extends Document {
   @Prop({ type: String, required: false })
   address: string;
 
-  @Prop({ type: Number, required: true })
-  salary: number;
-
   @Prop({ type: String, required: false })
   profilePhoto: string;
 

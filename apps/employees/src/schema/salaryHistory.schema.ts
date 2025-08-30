@@ -1,18 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { SalaryStatus } from '../enum/employee.enum';
+import { DatabaseCounterEnum, SalaryStatus } from '../enum/employee.enum';
 
 @Schema({ timestamps: true })
 export class SalaryHistory extends Document {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee',
     required: true,
   })
   staffId: mongoose.Types.ObjectId;
 
   @Prop({ type: Number, required: true })
   salary: number;
+
+  @Prop({ type: String, enum: DatabaseCounterEnum, required: true })
+  userType: DatabaseCounterEnum;
 
   @Prop({ type: Date, required: true })
   date: Date;

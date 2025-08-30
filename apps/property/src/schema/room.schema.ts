@@ -10,9 +10,6 @@ export class Room {
   propertyId: string;
 
   @Prop({ type: String, required: true })
-  propertyName: string;
-
-  @Prop({ type: String, required: true })
   roomNumber: string;
 
   @Prop({ type: String, required: true })
@@ -22,7 +19,7 @@ export class Room {
   occupants: number;
 
   @Prop({ type: Number, required: true })
-  vacanrSlots: number;
+  vacantSlots: number;
 
   @Prop({ type: String, required: true })
   status: string;
@@ -33,7 +30,7 @@ export class Room {
   @Prop({
     type: [
       {
-        userId: { type: MongooseSchema.Types.ObjectId, ref: 'User' },
+        userId: { type: MongooseSchema.Types.ObjectId },
         userType: {
           type: String,
           enum: Object.values(UserType),
@@ -48,4 +45,4 @@ export class Room {
   };
 }
 
-export const RoomScehma = SchemaFactory.createForClass(Room);
+export const RoomSchema = SchemaFactory.createForClass(Room);

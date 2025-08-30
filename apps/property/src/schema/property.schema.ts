@@ -43,7 +43,7 @@ export class Property {
   @Prop({ type: [String], default: [] })
   amenities: string[];
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Client', index: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, index: true })
   clientId?: string;
 
   @Prop({ type: Boolean, default: false, index: true })
