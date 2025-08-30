@@ -17,6 +17,7 @@ import {
   StatusRequestSchema,
 } from './schema/statusRequest.schema';
 import { Fine, FineSchema } from './schema/fine.schema';
+import { Client, ClientSchema } from './schema/client.schema';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Fine, FineSchema } from './schema/fine.schema';
       { name: ServiceHistory.name, schema: ServiceHistorySchema },
       { name: StatusRequest.name, schema: StatusRequestSchema },
       { name: Fine.name, schema: FineSchema },
+      { name: Client.name, schema: ClientSchema },
     ]),
   ],
   controllers: [UserController],

@@ -5,6 +5,7 @@ export enum USER_STATUS {
 
 export enum DatabaseCounterEnum {
   USER = 'User',
+  CLIENT = 'Client',
 }
 
 export enum DepositStatus {
