@@ -3,8 +3,6 @@ import { MessController } from './mess.controller';
 import { MessService } from './mess.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Addon, AddonSchema } from './schema/addon.schema';
-import { AddonBooking, AddonBookingSchema } from './schema/addonBooking.schema';
 import { Category, CategorySchema } from './schema/category.schema';
 import {
   DatabaseCounter,
@@ -34,8 +32,6 @@ import {
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MESS_MONGO_URL!),
     MongooseModule.forFeature([
-      { name: Addon.name, schema: AddonSchema },
-      { name: AddonBooking.name, schema: AddonBookingSchema },
       { name: Category.name, schema: CategorySchema },
       { name: DatabaseCounter.name, schema: DatabaseCounterSchema },
       { name: Inventory.name, schema: InventorySchema },

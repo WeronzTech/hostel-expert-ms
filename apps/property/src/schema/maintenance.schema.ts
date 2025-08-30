@@ -11,11 +11,8 @@ export class Maintenance extends Document {
   @Prop({ unique: true, index: true })
   maintenanceId: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, required: true })
   reportedBy: Types.ObjectId;
-
-  @Prop({ required: true })
-  userName: string;
 
   @Prop()
   roomNo?: string;
@@ -55,7 +52,7 @@ export class Maintenance extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Property', required: true })
   propertyId: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Staff' })
+  @Prop({ type: Types.ObjectId })
   assignedStaffId?: Types.ObjectId;
 }
 

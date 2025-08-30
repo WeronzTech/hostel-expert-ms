@@ -55,15 +55,6 @@
         "tsConfigPath": "apps/employees/tsconfig.app.json"
       }
     },
-    "maintenance": {
-      "type": "application",
-      "root": "apps/maintenance",
-      "entryFile": "main",
-      "sourceRoot": "apps/maintenance/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/maintenance/tsconfig.app.json"
-      }
-    },
     "mess": {
       "type": "application",
       "root": "apps/mess",

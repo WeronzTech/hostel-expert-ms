@@ -21,12 +21,5 @@ export enum OrderStatus {
 }
 
 export enum CounterType {
-  ADDON = 'addon',
   MESS = 'mess',
-}
-
-export enum AddOnCategory {
-  BEVERAGES = 'beverages',
-  SNACKS = 'snacks',
-  OTHERS = 'others',
 }

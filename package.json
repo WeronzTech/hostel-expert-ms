@@ -21,7 +21,7 @@
     "start:dev:socket": "nest start socket --tsc --watch",
     "start:dev:notification": "nest start notification --tsc --watch",
     "start:debug": "nest start --debug --watch",
-    "start:all": "concurrently --names \"API-GATEWAY,USER,PROPERTY,ACCOUNTS,MESS,MAINTENANCE,EMPLOYEES,AUTH,SOCKET,NOTIFICATION\" \"nest start api-gateway --watch\" \"nest start user --watch\" \"nest start property --watch\" \"nest start accounts --watch\" \"nest start mess --watch\" \"nest start maintenance --watch\" \"nest start employees --watch\" \"nest start auth --watch\" \"nest start socket --watch\" \"nest start notification --watch\"",
+    "start:all": "concurrently --names \"API-GATEWAY,USER,PROPERTY,ACCOUNTS,MESS,EMPLOYEES,AUTH,SOCKET,NOTIFICATION\" \"nest start api-gateway --watch\" \"nest start user --watch\" \"nest start property --watch\" \"nest start accounts --watch\" \"nest start mess --watch\" \"nest start employees --watch\" \"nest start auth --watch\" \"nest start socket --watch\" \"nest start notification --watch\"",
     "start:prod": "node dist/apps/hostel-expert-ms/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
