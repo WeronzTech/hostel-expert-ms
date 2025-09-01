@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { DatabaseCounterDocument } from './databaseCounter.schema';
 import { CounterType } from '../enum/counter-type.enum';
+import { PropertyType } from '../enum/property-type.enum';
 
 export type PropertyDocument = Property & Document;
 
@@ -22,23 +23,27 @@ export class Property {
   })
   contacts?: { primary?: string; alternate?: string };
 
-  @Prop({ required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true })
   address: string;
 
-  @Prop({ required: true, min: 1, default: 1 })
+  @Prop({ type: Number, required: true, min: 1, default: 1 })
   totalBeds: number;
 
-  @Prop({ required: true, min: 0, default: 0 })
+  @Prop({ type: Number, required: true, min: 0, default: 0 })
   occupiedBeds: number;
 
   @Prop({ type: Map, of: Number, default: {} })
   sharingPrices: Map<string, number>;
 
-  @Prop({ trim: true })
+  @Prop({ type: String, trim: true })
   preferredBy?: string; // e.g. Students, Professionals
 
-  @Prop({ trim: true })
-  propertyType?: string; // e.g. Hostel, PG, Apartment
+  @Prop({
+    type: String,
+    enum: Object.values(PropertyType),
+    trim: true,
+  })
+  propertyType?: PropertyType; // e.g. Hostel, PG, Apartment
 
   @Prop({ type: [String], default: [] })
   amenities: string[];
@@ -49,7 +54,7 @@ export class Property {
   @Prop({ type: Boolean, default: false, index: true })
   isDeleted: boolean;
 
-  @Prop()
+  @Prop({ type: Date })
   deletedAt?: Date;
 }
 
