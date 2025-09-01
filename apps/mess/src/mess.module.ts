@@ -26,6 +26,8 @@ import {
   UsageForPreparation,
   UsageForPreparationSchema,
 } from './schema/usageForPreparation.schema';
+import { KitchenController } from './controllers/kitchen.controller';
+import { KitchenService } from './services/kitchen.service';
 
 @Module({
   imports: [
@@ -45,7 +47,7 @@ import {
       { name: UsageForPreparation.name, schema: UsageForPreparationSchema },
     ]),
   ],
-  controllers: [MessController],
-  providers: [MessService],
+  controllers: [MessController, KitchenController],
+  providers: [MessService, KitchenService],
 })
 export class MessModule {}

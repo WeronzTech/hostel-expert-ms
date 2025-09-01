@@ -4,6 +4,8 @@ import { MessController } from './mess.controller';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MESS_CLIENT, MESS_QUEUE } from '@app/common/token/token';
+import { KitchenService } from './services/kitchen.service';
+import { KitchenController } from './controllers/kitchen.controller';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { MESS_CLIENT, MESS_QUEUE } from '@app/common/token/token';
       },
     ]),
   ],
-  controllers: [MessController],
-  providers: [MessService],
+  controllers: [MessController, KitchenController],
+  providers: [MessService, KitchenService],
 })
 export class MessModule {}
